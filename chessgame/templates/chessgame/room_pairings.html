@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Match Pairings | {{ room.name }}{% endblock %}
+
+{% block header %}
+  {% include 'navbar.html' %}
+        {% include 'notifi.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Match Pairings for <strong>{{ room.name }}</strong></h2>
+
+  {% if match_pairs %}
+    <div class="row">
+      {% for pair in match_pairs %}
+	  
+        <div class="col-md-6 col-lg-4 mb-4">
+          <div class="card shadow-3">
+            <div class="card-body text-center">
+              <h5 class="card-title mb-3">Match {{ forloop.counter }}</h5>
+              <div class="d-flex justify-content-between align-items-center mb-2">
+			  
+			  
+<div class="text-start">
+  <strong>White:</strong>
+  <p class="mb-0">
+    <a href="{% url 'profile' %}?username={{ pair.white_user.username }}">
+      {{ pair.white_user.username|default:"Unknown" }}
+    </a>
+  </p>
+</div>
+
+<i class="fas fa-chess-knight fa-lg text-secondary"></i>
+
+<div class="text-end">
+  <strong>Black:</strong>
+  <p class="mb-0">
+    <a href="{% url 'profile' %}?username={{ pair.black_user.username }}">
+      {{ pair.black_user.username|default:"Unknown" }}
+    </a>
+  </p>
+</div>
+
+				
+				
+              </div>
+            </div>
+          </div>
+        </div>
+		
+		
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info">No pairings available for this room.</div>
+  {% endif %}
+
+  <div class="text-center mt-4">
+  
+	  <button class="btn btn-secondary mt-3" onclick="history.back()">Back</button>
+
+  </div>
+  
+</div>
+{% endblock %}

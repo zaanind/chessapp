@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Game Room{% endblock %}
+
+
+
+{% block header %}
+
+  {% include 'navbar.html' %}
+{% endblock %}
+
+
+{% block content %}
+
+<div class="d-flex">
+
+  {% include 'sidebaradmin.html' %}
+
+<div class="container mt-4 flex-grow-1">
+  <h2>Manage Room for Game #{{ game.id }}</h2>
+  <p><strong>Room ID:</strong> {{ room.id }}</p>
+  <p><strong>Room Type:</strong> {{ room.room_type }}</p>
+
+  <hr>
+
+  <h4>Current Players</h4>
+  <ul class="list-group mb-4">
+    {% for pr in players %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      {{ pr.user.username }} <span class="badge bg-secondary">{{ pr.color_group }}</span>
+      <form method="post" class="mb-0">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="remove">
+        <input type="hidden" name="user_id" value="{{ pr.user.id }}">
+        <button type="submit" class="btn btn-sm btn-danger">Remove</button>
+      </form>
+    </li>
+    {% empty %}
+    <li class="list-group-item text-muted">No players assigned yet.</li>
+    {% endfor %}
+  </ul>
+
+  <h4>Add Player to Room</h4>
+  <form method="post" class="mb-3">
+    {% csrf_token %}
+    <div class="row g-3 align-items-center">
+      <div class="col-auto">
+        <select name="user_id" class="form-select" required>
+          <option value="" disabled selected>Select User</option>
+          {% for profile in available_profiles %}
+          <option value="{{ profile.user.id }}">{{ profile.user.username }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-auto">
+        <select name="color_group" class="form-select" required>
+          <option value="" disabled selected>Select Color</option>
+          <option value="white">White</option>
+          <option value="black">Black</option>
+        </select>
+      </div>
+      <div class="col-auto">
+        <input type="hidden" name="action" value="assign">
+        <button type="submit" class="btn btn-primary">Assign</button>
+      </div>
+    </div>
+  </form>
+
+<hr>
+
+<!--span> {{ room.start_datetime}}</span>
+<span> {{ room_tz }}</span-->
+<h4>Force Win Side</h4>
+<form method="post" class="mb-3">
+  {% csrf_token %}
+  <input type="hidden" name="action" value="force_win">
+  <div class="row g-3 align-items-center">
+    <div class="col-auto">
+      <select name="force_to_win_side" class="form-select" required>
+        <option value="" disabled {% if not room.force_to_win_side %}selected{% endif %}>Select Side</option>
+        <option value="WHITE" {% if room.force_to_win_side == 'WHITE' %}selected{% endif %}>White</option>
+        <option value="BLACK" {% if room.force_to_win_side == 'BLACK' %}selected{% endif %}>Black</option>
+      </select>
+    </div>
+    <div class="col-auto">
+      <button type="submit" class="btn btn-warning">Set Force Win</button>
+    </div>
+  </div>
+</form>
+
+
+
+<hr>
+<h4>Signal Bets</h4>
+<form method="post">
+  {% csrf_token %}
+  <input type="hidden" name="action" value="toggle_signal">
+  
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" name="is_signal" value="true" id="isSignalCheckbox"
+           {% if room.is_signal %}checked{% endif %}>
+    <label class="form-check-label" for="isSignalCheckbox">
+      Enable Signal Bet
+    </label>
+  </div>
+  <button type="submit" class="btn btn-outline-success mt-2">Update </button>
+</form>
+<hr>
+<h4>Bets</h4>
+<p><strong>Total on White:</strong> {{ bets_white }}</p>
+<p><strong>Total on Black:</strong> {{ bets_black }}</p>
+
+<hr class="my-4" />
+
+<form method="get" class="row g-3 align-items-end">
+  <div class="col-md-4">
+    <label for="startDate" class="form-label">Start Date:</label>
+    <input type="datetime-local" class="form-control" id="startDate" name="start_date" 
+           {% if start_date %}value="{{ start_date }}"{% endif %}>
+  </div>
+  <div class="col-md-4">
+    <label for="endDate" class="form-label">End Date:</label>
+    <input type="datetime-local" class="form-control" id="endDate" name="end_date" 
+           {% if end_date %}value="{{ end_date }}"{% endif %}>
+  </div>
+  <div class="col-md-4">
+    <button type="submit" class="btn btn-primary mt-3">Filter</button>
+  </div>
+</form>
+
+<h4 class="mt-5">Bets</h4>
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+    <thead class="table-light">
+      <tr>
+        <th>User</th>
+        <th>Side</th>
+        <th>Amount</th>
+        <th>Placed At</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for bet in bets %}
+      <tr>
+        <td>{{ bet.user.username }}</td>
+        <td>{{ bet.side }}</td>
+        <td>{{ bet.amount }}</td>
+        <td>{{ bet.placed_at|date:"Y-m-d H:i:s" }}</td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4" class="text-center">No bets found in this range.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<hr>
+<h4>24Hours Room</h4>
+<form method="post">
+  {% csrf_token %}
+  <input type="hidden" name="action" value="enable24hours">
+  
+  <div class="form-check">
+    <input class="form-check-input" type="checkbox" name="is_auto_24" value="true" id="isauto24Checkbox"
+           {% if room.is_automated_room %}checked{% endif %}>
+    <label class="form-check-label" for="isauto24Checkbox">
+      Enable 24hour Game
+    </label>
+  </div>
+  <button type="submit" class="btn btn-outline-success mt-2">Update </button>
+</form>
+<hr>
+  <a href="{% url 'manager' %}" class="btn btn-secondary mt-3">Back to Manager Dashboard</a>
+  <br>
+  
+  
+<br>
+<br>
+</div>
+
+</div>
+{% endblock %}

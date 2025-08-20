@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Wallet Requests{% endblock %}
+
+{% block header %}
+  {% include 'navbar.html' %}
+{% endblock %}
+
+
+
+{% block content %}
+<div class="d-flex">
+
+  {% include 'sidebaradmin.html' %}
+
+<div class="container mt-4  flex-grow-1">
+
+
+    {% if requests %}
+        <table class="table table-bordered table-sm">
+            <thead>
+                <tr>
+                    <th>User</th>
+                    <th>Type</th>
+                    <th>Wallet</th>
+                    <th>Amount</th>
+					    <th>Reference </th>
+						      <th>Status</th>
+                    <th>Requested At</th>
+                    <th>Note</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for r in requests %}
+                <tr>
+                    <td>{{ r.user.username }}</td>
+                    <td>{{ r.get_request_type_display }}</td>
+                    <td>{{ r.wallet_type }}</td>
+                    <td>${{ r.amount }}</td>
+					  <td>{{ r.reference_number|default:"-" }}</td>
+					          <td>{{ r.status }}</td>
+                    <td>{{ r.created_at|date:"Y-m-d H:i" }}</td>
+                    <td>{{ r.note|default:"-" }}</td>
+                    <td>  {% if r.status == 'PENDING' %}
+					
+                        <form method="post" class="d-flex flex-column gap-1">
+                            {% csrf_token %}
+                            <input type="hidden" name="req_id" value="{{ r.id }}">
+                            <input type="text" name="note" class="form-control mb-1" placeholder="Note (optional)">
+                            <button name="action" value="approve" class="btn btn-success btn-sm">Approve</button>
+                            <button name="action" value="reject" class="btn btn-danger btn-sm">Reject</button>
+                        </form>
+						{% else %}
+						
+						-
+						
+						{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+		
+	<nav aria-label="Game pagination">
+  <ul class="pagination justify-content-center mt-3">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page=1">First</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">First</span></li>
+      <li class="page-item disabled"><span class="page-link">Previous</span></li>
+    {% endif %}
+
+    <li class="page-item active">
+      <span class="page-link">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    </li>
+
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Next</span></li>
+      <li class="page-item disabled"><span class="page-link">Last</span></li>
+    {% endif %}
+  </ul>
+</nav>
+
+
+    {% else %}
+        <p>No pending requests.</p>
+    {% endif %}
+</div>
+
+
+
+</div>
+{% endblock %}

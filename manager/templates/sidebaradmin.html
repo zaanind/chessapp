@@ -1,0 +1,52 @@
+  <!-- Sidebar -->
+  <div class="d-flex flex-column flex-shrink-0 p-3 " style="width: 280px; height: max;">
+    <ul class="nav nav-pills flex-column mb-auto">
+
+      <li>
+        <a href="{% url 'manager' %}" class="nav-link link-light ">
+   
+          Dashboard
+        </a>
+      </li>
+      <li>
+        <a href="{% url 'manage_wallet_requests' %}" class="nav-link link-light">
+  
+          Wallet Management
+        </a>
+      </li>
+	  
+	        <li>
+        <a href="{% url 'user_list' %}" class="nav-link link-light">
+  
+           Users
+        </a>
+      </li>
+	  
+	  
+	  
+	  	        <li>
+        <a href="{% url 'company_commission_list' %}" class="nav-link link-light">
+  
+           Company Commissions
+        </a>
+      </li>
+	  
+	  
+	  
+	  
+      <li>
+        <a href="{% url 'admin:index' %}" class="nav-link link-light">
+  
+          Django Admin
+        </a>
+      </li>
+	  
+	  
+      <!--li>
+        <a href="#" class="nav-link link-dark">
+       
+          Customers
+        </a>
+      </li-->
+    </ul>
+  </div>

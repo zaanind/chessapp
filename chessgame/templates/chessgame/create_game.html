@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Create Game{% endblock %}
+
+{% block header %}
+  {% include 'navbar.html' %}
+        {% include 'notifi.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow p-4">
+    <h2 class="mb-4">Start a New Game</h2>
+
+    <form method="post">
+      {% csrf_token %}
+
+      <!-- Room Name -->
+      <div class="mb-4">
+        <label for="room_name" class="form-label">Game Name</label>
+        <input type="text" id="room_name" name="room_name" class="form-control" required>
+      </div>
+
+      <!-- Rounds -->
+      <div class="mb-4">
+        <label class="form-label">Rounds</label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="rounds" id="round_1" value="1" required>
+          <label class="form-check-label" for="round_1">1</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="rounds" id="round_2by3" value="2by3">
+          <label class="form-check-label" for="round_2by3">2 by 3</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="rounds" id="round_3by5" value="3by5">
+          <label class="form-check-label" for="round_3by5">3 by 5</label>
+        </div>
+      </div>
+
+      <!-- Game Time -->
+      <div class="mb-4">
+        <label class="form-label">Game Time</label>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="gtime" id="gtime_1" value="60" required>
+          <label class="form-check-label" for="gtime_1">1 Min</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="gtime" id="gtime_5" value="300">
+          <label class="form-check-label" for="gtime_5">5 Min</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="gtime" id="gtime_10" value="600">
+          <label class="form-check-label" for="gtime_10">10 Min</label>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="btn btn-primary w-100">Start Game</button>
+    </form>
+
+    <div class="mt-4 text-center">
+      <span>Want to <a href="{% url 'create_tournament' %}">Create Tournament?</a></span>
+    </div>
+  </div>
+</div>
+{% endblock %}

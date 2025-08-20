@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Tournaments Needing Players{% endblock %}
+
+{% block header %}
+  {% include 'navbar.html' %}
+        {% include 'notifi.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2>Tournaments Needing Players</h2>
+
+  <p>
+    You selected <strong>{{ data.max_users }}</strong> participants.<br>
+    To create a fair bracket, we suggest using <strong>{{ nearest_max }}</strong> participants.
+  </p>
+
+  <p>
+    The following tournaments are almost ready. You can use one of these:
+  </p>
+
+  {% if suggestions %}
+    <div class="table-responsive">
+      <table class="table table-striped table-bordered">
+        <thead class="table-dark">
+          <tr>
+            <th>Name</th>
+            <th>Participants</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in suggestions %}
+            <tr>
+              <td>{{ t.name }}</td>
+              <td>{{ t.current_users }} / {{ t.total_needed }}</td>
+              <td>Needs {{ t.remaining }} more</td>
+              <td>
+                <form method="post">
+                  {% csrf_token %}
+                  <input type="hidden" name="selected_room" value="{{ t.room_id }}">
+                  <button type="submit" class="btn btn-primary">Use This</button>
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="alert alert-info mt-3">No available tournaments found.</div>
+  {% endif %}
+
+  <a href="{% url 'create_tournament' %}" class="btn btn-secondary mt-4">Go Back and Edit Selection</a>
+</div>
+{% endblock %}

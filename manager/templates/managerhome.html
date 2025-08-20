@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Manager{% endblock %}
+
+
+
+{% block header %}
+  {% include 'navbar.html' %}
+{% endblock %}
+
+
+
+
+{% block content %}
+<div class="d-flex">
+
+  {% include 'sidebaradmin.html' %}
+  <!-- Main Content -->
+  <div class="container mt-4 flex-grow-1">
+    <h1>Admin Interface</h1>
+    <p>List of games.</p>
+	
+	
+{% if active_games %}
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered">
+      <thead class="table-dark">
+        <tr>
+
+          <th>Room</th>
+		  <th>Type</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in active_games %}
+          {% with game=item.game %}
+            <tr>
+
+              <td>{{ game.room.name }} - (id : {{ game.room.id }} )</td>
+			  
+			                <td>{{ game.room.room_type }}</td>
+          
+		  <!--action button-->
+		        <td>
+<a href="{% url 'manage_game_room' game.id %}" class="btn btn-sm btn-outline-primary">
+    Edit 
+</a>
+
+        </td>  
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+            </tr>
+          {% endwith %}
+        {% endfor %}
+      </tbody>
+    </table>
+	
+	<nav aria-label="Game pagination">
+  <ul class="pagination justify-content-center mt-3">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page=1">First</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">First</span></li>
+      <li class="page-item disabled"><span class="page-link">Previous</span></li>
+    {% endif %}
+
+    <li class="page-item active">
+      <span class="page-link">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    </li>
+
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Next</span></li>
+      <li class="page-item disabled"><span class="page-link">Last</span></li>
+    {% endif %}
+  </ul>
+</nav>
+
+
+  </div>
+{% else %}
+  <div class="alert alert-info mt-3">No active games right now.</div>
+{% endif %}
+
+  </div>
+</div>
+
+<br>
+<br>
+
+{% endblock %}
