@@ -1,0 +1,242 @@
+
+
+<style>
+/* Color of the links BEFORE scroll */
+.navbar-scroll .nav-link,
+.navbar-scroll .navbar-toggler-icon,
+.navbar-scroll .navbar-brand {
+  color: #262626;
+}
+
+/* Color of the navbar BEFORE scroll */
+.navbar-scroll {
+  background-color: #FFC017;
+}
+
+/* Color of the links AFTER scroll */
+.navbar-scrolled .nav-link,
+.navbar-scrolled .navbar-toggler-icon,
+.navbar-scroll .navbar-brand {
+  color: #262626;
+}
+
+/* Color of the navbar AFTER scroll */
+.navbar-scrolled {
+  background-color: #fff;
+}
+
+/* An optional height of the navbar AFTER scroll */
+.navbar.navbar-scroll.navbar-scrolled {
+  padding-top: auto;
+  padding-bottom: auto;
+}
+.navbar-brand {
+  font-size: unset;
+  height: 3.5rem;
+}
+
+img.profilemenu {
+    margin-top: 8px;
+}
+</style>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css" />
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" />
+   
+<nav class="navbar navbar-expand-lg navbar-light ">
+  <!-- Container wrapper        navbar class    bg-light  fixed-top    -->
+  <div class="container">
+    <!-- Navbar brand -->
+	{% load static %}
+    <a class="navbar-brand" href="{% url 'home' %}"><img src="{% static 'img/logo.png' %}" style="width:180px; height:40px"></a>
+    <!-- Search form -->
+    <!--form class="input-group" style="width: 400px">
+      <input type="search" class="form-control" placeholder="Type query" aria-label="Search" />
+      <button class="btn btn-outline-primary" type="button" data-mdb-ripple-init data-mdb-ripple-color="dark" style="padding: .45rem 1.5rem .35rem;">
+        Search
+      </button>
+    </form-->
+
+    <!-- Toggle button -->
+    <button class="navbar-toggler" type="button" data-mdb-collapse-init
+      data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+      aria-label="Toggle navigation">
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Collapsible wrapper -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <!-- Left links -->
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+	  
+	  
+
+
+
+
+
+        <li class="nav-item">
+          <a class="nav-link d-flex flex-column text-center " aria-current="page" href="{% url 'home' %}"><i class="fas fa-home fa-lg my-2"></i><span class="small">Home</span></a>
+        </li>
+
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="notificationsDropdown"
+            role="button" data-mdb-dropdown-init aria-expanded="false">
+    <i class="fas fa-bell fa-lg my-2"></i><span class="small">Notifications</span>
+	     <span class="badge rounded-pill badge-notification bg-danger" style="display: none;">0</span>
+      
+          </a>
+		  <ul class="dropdown-menu" aria-labelledby="notificationsDropdown" id="notificationsDropdownMenu">
+
+</ul>
+          <!--ul class="dropdown-menu" aria-labelledby="notificationsDropdown">
+		  
+		  	  <li><a class="dropdown-item" href="">My Profile</a></li>
+            <li><a class="dropdown-item" href="">Wallet</a></li>
+            <li><a class="dropdown-item" href="">Wallet 2</a></li>
+            <li><a class="dropdown-item" href="">Referrals</a></li>
+
+		
+			  
+			  
+          </ul-->
+		  
+		  
+
+
+        </li>
+<script>
+function addNotification(message, iconClass = 'fa-info-circle', link = '#') {
+  const menu = document.getElementById('notificationsDropdownMenu');
+  if (!menu) return console.error("Dropdown menu not found");
+
+  const newItem = document.createElement('li');
+  newItem.innerHTML = `
+    <a class="dropdown-item" href="${link}">
+      <i class="fas ${iconClass} me-2"></i>
+      <span>${message}</span>
+    </a>
+  `;
+  menu.prepend(newItem);
+
+  const badge = document.querySelector('.badge-notification');
+  let count = parseInt(badge.textContent) || 0;
+  count += 1;
+  badge.textContent = count;
+  badge.style.display = count > 0 ? 'inline-block' : 'none';
+}
+
+
+  //addNotification("View your invoice", "fa-file-invoice", "/invoices/123");
+// addNotification("Friend request from John", "fa-user-plus", "/profile/john");
+
+
+function clearNotifications() {
+  const menu = document.getElementById('notificationsDropdownMenu');
+  if (!menu) return console.error("Dropdown menu not found");
+
+  menu.innerHTML = ""; // clear all items
+
+  const badge = document.querySelector('.badge-notification');
+  badge.textContent = 0;
+  badge.style.display = "none";
+}
+
+</script>
+
+
+	   <li class="nav-item">
+          <a class="nav-link d-flex flex-column text-center " aria-current="page" href="{% url 'create_game' %}"><i class="fas fa-plus fa-lg my-2"></i><span class="small">New Game</span></a>
+        </li>
+
+		
+		      {% if staff %}
+			  
+			  
+        <li class="nav-item">
+          <a class="nav-link d-flex flex-column text-center" aria-current="page" href="{% url 'manager' %}"><i class="fas fa-wrench fa-lg my-2"></i><span class="small">Admin</span></a>
+        </li>
+		
+		  {% endif %}
+		  
+
+
+
+<style>
+#notificationsDropdownMenu > li > a > span {
+
+    white-space: normal;
+    word-break: break-word;
+}
+
+
+ul#notificationsDropdownMenu {
+    width: 210px;
+    scroll-behavior: smooth;
+    overflow-y: scroll;
+    max-height: 400px;
+    min-height: 50px;
+}
+
+/* Adjust spacing for the notification button if needed */
+a#notificationsDropdown {
+    margin-top: 4px;
+}
+
+/* Add a max-width to the dropdown menu to prevent it from going off-screen */
+.dropdown-menu {
+  max-width: 300px; /* Adjust this value as needed */
+  min-width: 250px; /* Ensure it doesn't get too small */
+}
+
+/* Ensure the dropdown menu doesn't get hidden */
+.dropdown-menu.show {
+  display: block;
+}
+</style>
+		
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdownMenuLink"
+            role="button" data-mdb-dropdown-init aria-expanded="false">
+            
+			<img
+              src="https://mdbootstrap.com/img/Photos/Avatars/img%20(9).jpg"
+              class="rounded-circle profilemenu"
+              height="30"
+              alt=""
+              loading="lazy"
+            />
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+		  	  <li><a class="dropdown-item" href="{% url 'profile' %}?user_id={{ request.user.id }}">My Profile</a></li>
+            <li><a class="dropdown-item" href="{% url 'wallet_dashboard' %}">Wallet</a></li>
+            <li><a class="dropdown-item" href="{% url 'secwallet_dashboard' %}">Wallet 2</a></li>
+            <li><a class="dropdown-item" href="{% url 'referral_dashboard' %}">Referrals</a></li>
+            <!--li><a class="dropdown-item" href="#">Settings</a></li-->
+			
+
+
+
+          <form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+      <li><a class="dropdown-item" href="#">  <input class="dropdown-item" type="submit" value="Logout" style="background: none; border: none; padding: 0; margin: 0; cursor: pointer;"></a></li>
+		</form>
+			  
+			  
+          </ul>
+        </li>
+      </ul>
+      <!-- Left links -->
+    </div>
+    <!-- Collapsible wrapper -->
+  </div>
+  <!-- Container wrapper -->
+</nav>
+
+	{% load static %}
+    <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}">
+    <script type="text/javascript" src="{% static 'js/mdb.umd.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/mdb.min.js' %}"></script>
+  

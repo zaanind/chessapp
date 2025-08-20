@@ -1,0 +1,52 @@
+
+<script>
+function showGameModal(message, title = "Notification") {
+  $('#gameAlertModalLabel').text(title);
+  $('#gameAlertModalBody').html(message);
+
+  const modalEl = document.getElementById('gameAlertModal');
+  const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+  modal.show();
+}
+
+function connectSocket() {
+  const wsScheme = window.location.protocol === "https:" ? "wss://" : "ws://";
+  const socket = new WebSocket(`${wsScheme}${window.location.host}/ws/home/`);
+
+  socket.onopen = () => {
+    console.log("✅ WebSocket connected");
+  };
+
+  socket.onmessage = (e) => {
+    const data = JSON.parse(e.data);
+    console.log("📩 Received:", data);
+
+    // Handle popup message
+    if (data.popup) {
+      if (data.state === 'over') {
+        showGameModal(data.popup, "Game Over");
+      } else if (data.state === 'warning') {
+        showGameModal(data.popup, "Warning");
+      } else {
+        showGameModal(data.popup, "Alert");
+      }
+
+
+	
+    }
+    if (data.ui_ref === 'ui_notification') {
+      addNotification(data.message, data.icon || 'fa-info-circle',data.notif_link);
+    }
+    // Add more handlers here if needed
+  };
+
+  socket.onclose = () => {
+    console.warn("❌ WebSocket disconnected, retrying...");
+    setTimeout(connectSocket, 1000);
+	clearNotifications();
+  };
+}
+
+// Start connection
+connectSocket();
+</script>
