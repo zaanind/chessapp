@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Referral Dashboard{% endblock %}
+
+{% block header %}
+  {% include 'navbar.html' %}
+        {% include 'notifi.html' %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5">
+
+  <!-- Alert Placeholder -->
+  <div id="copyAlert" class="alert alert-success alert-dismissible fade show mx-auto text-center w-50" style="display: none;" role="alert">
+    Referral code copied to clipboard!
+    <button type="button" class="btn-close" onclick="closeAlert()"></button>
+  </div>
+
+  <div class="row justify-content-center">
+
+    <!-- Referral Code Card -->
+    <div class="col-md-8 mb-4">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h4 class="card-title">Your Referral Code</h4>
+          <p class="card-text">
+            Share this code with your friends during sign-up to earn rewards.
+          </p>
+          <div class="input-group">
+            <input type="text" id="referralCode" class="form-control" value="{{ referral_code }}" readonly>
+            <button class="btn btn-primary" onclick="copyCode()">Copy</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Referral List Card -->
+    <div class="col-md-8">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h4 class="card-title">Your Referrals</h4>
+          {% if referrals %}
+            <ul class="list-group list-group-flush">
+              {% for ref in referrals %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <div>
+                    <strong>{{ ref.referred.username }}</strong><br>
+                    <small class="text-muted">{{ ref.timestamp|date:"Y-m-d H:i" }}</small>
+                  </div>
+                
+                </li>
+              {% endfor %}
+            </ul>
+          {% else %}
+            <p class="text-muted">You haven't referred anyone yet.</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  function copyCode() {
+    const input = document.getElementById("referralCode");
+    input.select();
+    input.setSelectionRange(0, 99999); // For mobile devices
+    document.execCommand("copy");
+
+    // Show alert
+    const alertBox = document.getElementById("copyAlert");
+    alertBox.style.display = 'block';
+    setTimeout(() => {
+      alertBox.style.display = 'none';
+    }, 3000);
+  }
+
+  function closeAlert() {
+    document.getElementById("copyAlert").style.display = 'none';
+  }
+</script>
+
+{% endblock %}

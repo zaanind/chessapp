@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block header %}
+  {% include 'navbar.html' %}
+      {% include 'notifi.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+  <!--h1 class="mb-3">Welcome, {{ user.username }}!</h1-->
+ 
+
+  <h2>Games</h2>
+
+{% if active_games %}
+  <div class="table-responsive">
+    <table class="table table-striped table-bordered">
+      <thead class="table-dark">
+        <tr>
+          <th> Participations</th>
+          <th>Room</th>
+          <th>Rounds</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in active_games %}
+          {% with game=item.game %}
+            <tr>
+              <td>{{ game.participation_summary }}</td>
+              <td>{{ game.room.name }}</td>
+              <td>{{ game.room.round_type }}</td>
+          
+		  <!--action button-->
+		        <td>
+          <form action="{{ item.button_url }}" method="get" class="d-inline">
+            <button type="submit" class="{{ item.button_class }}">{{ item.button_label }}</button>
+          </form>
+        </td>  
+		  
+		  
+		  
+		  
+		  
+		  
+		  
+            </tr>
+          {% endwith %}
+        {% endfor %}
+      </tbody>
+    </table>
+	
+	<nav aria-label="Game pagination">
+  <ul class="pagination justify-content-center mt-3">
+    {% if page_obj.has_previous %}
+      <li class="page-item">
+        <a class="page-link" href="?page=1">First</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">First</span></li>
+      <li class="page-item disabled"><span class="page-link">Previous</span></li>
+    {% endif %}
+
+    <li class="page-item active">
+      <span class="page-link">{{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+    </li>
+
+    {% if page_obj.has_next %}
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+      </li>
+      <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+      </li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Next</span></li>
+      <li class="page-item disabled"><span class="page-link">Last</span></li>
+    {% endif %}
+  </ul>
+</nav>
+
+
+  </div>
+{% else %}
+  <div class="alert alert-info mt-3">No active games right now.</div>
+{% endif %}
+
+
+
+
+</div>
+<br>
+<br>
+
+
+<!-- Modal -->
+<div class="modal fade" id="gameAlertModal" tabindex="-1" aria-labelledby="gameAlertModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="gameAlertModalLabel">Notification</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="gameAlertModalBody">
+        <!-- Message will be injected here -->
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+{% endblock %}

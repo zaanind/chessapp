@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Wallet 2 - {{ req_type|capfirst }}{% endblock %}
+
+{% block header %}
+  {% include 'navbar.html' %}
+        {% include 'notifi.html' %}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Wallet 2 {{ req_type|capfirst }} Request</h2>
+
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="amount" class="form-label">Amount</label>
+            <input type="number" step="0.01" min="0.01" name="amount" class="form-control" required>
+        </div>
+
+        {% if req_type == "DEPOSIT" %}
+        <div class="mb-3">
+            <label for="reference_number" class="form-label">Deposit Reference Number</label>
+            <textarea name="reference_number" class="form-control" placeholder="Bank slip number or online reference"></textarea>
+        </div>
+        {% elif req_type == "WITHDRAW" %}
+        <div class="mb-3">
+            <label for="reference_number" class="form-label">Your Bank Account Number</label>
+            <textarea name="reference_number" class="form-control" placeholder="Provide your bank account number"></textarea>
+        </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary">Submit {{ req_type|capfirst }} Request</button>
+        <a href="{% url 'secwallet_dashboard' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

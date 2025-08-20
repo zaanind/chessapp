@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<div class="vh-100 d-flex align-items-center justify-content-center bg-dark">
+  <div class="col-md-5 col-lg-4">
+    <div class="card shadow-lg border-0 rounded-4 bg-dark text-light">
+      <div class="card-body p-5">
+
+        <h3 class="text-center mb-4 fw-bold">Login</h3>
+
+        {% if error %}
+          <div class="alert alert-danger text-center" role="alert">
+            {{ error }}
+          </div>
+        {% endif %}
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+
+          <div class="mb-4">
+            <label for="id_username" class="form-label">Username</label>
+            <input type="text" name="username" id="id_username"
+                   class="form-control form-control-lg bg-dark text-light border-secondary"
+                   placeholder="Enter your username" required>
+          </div>
+
+          <div class="mb-4">
+            <label for="id_password" class="form-label">Password</label>
+            <input type="password" name="password" id="id_password"
+                   class="form-control form-control-lg bg-dark text-light border-secondary"
+                   placeholder="Enter your password" required>
+          </div>
+
+          <button type="submit" class="btn btn-success btn-lg w-100 rounded-3">Login</button>
+        </form>
+
+        <div class="text-center mt-4">
+          <p class="mb-1">
+            <a href="{% url 'password_reset' %}" class="text-info fw-bold">Forgot Password?</a>
+          </p>
+          <p class="mb-0">
+            Don't have an account? <a href="{% url 'signup' %}" class="text-info fw-bold">Sign up</a>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
